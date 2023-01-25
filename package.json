@@ -1,0 +1,53 @@
+{
+  "name": "rip-nest",
+  "version": "0.0.0",
+  "description": "RIP NestJS no need in you",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "check": "npx tsc --project tsconfig.json",
+    "types": "rm -rf types && npx tsc --project tsconfig.types.json",
+    "lint": "eslint .",
+    "fmt": "eslint --fix .",
+    "docs": "npx typedoc --entryPointStrategy packages .",
+    "test": "export $(grep -v '^#' .env | xargs) && npx c8 --check-coverage tap --no-coverage",
+    "final": "npm run fmt && npm run check && npm run lint && npm run test && npm run types && npm run docs",
+    "prisma:migration:dev": "prisma migrate dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgolden/rip-nest.git"
+  },
+  "author": "Georg Oldenburger",
+  "contributors": [
+    "Vitaly Nagora"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/georgolden/rip-nest/issues"
+  },
+  "homepage": "https://github.com/georgolden/rip-nest#readme",
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "@oldbros/shiftjs": "^1.0.0-beta7",
+    "@prisma/client": "^4.9.0",
+    "fastify": "^4.10.2",
+    "pg": "^8.8.0",
+    "redis": "^4.5.1"
+  },
+  "devDependencies": {
+    "@oldbros/tsconfig": "^1.0.1",
+    "@types/node": "^18.11.18",
+    "@types/pg": "^8.6.6",
+    "@types/ws": "^8.5.3",
+    "eslint": "^8.31.0",
+    "eslint-config-oldbros": "^1.0.2",
+    "prisma": "^4.9.0",
+    "prisma-json-schema-generator": "^3.1.2",
+    "tap": "^16.3.4",
+    "typescript": "^4.9.4"
+  }
+}

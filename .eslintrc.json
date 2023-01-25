@@ -1,0 +1,7 @@
+{
+  "extends": ["oldbros"],
+  "rules": {
+    "max-len": ["error", 120],
+    "quote-props": ["error", "as-needed"]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "@oldbros/tsconfig",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "types"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.js"]
+}
