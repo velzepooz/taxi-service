@@ -1,24 +1,20 @@
 /**
  * @typedef {import('../prisma/prisma.service').PrismaService} Prisma
- * @typedef {import('./dto/driver.dto').CreateDriverDto} CreateDriverDto
  *
  * @typedef {object} Deps
  * @property {Prisma} prisma
  *
  * @callback CreateDriver
- * @param {CreateDriverDto} payload
  */
 
 import { partial } from '@oldbros/shiftjs';
 
 /**
  * @param {Deps} deps
- * @param {CreateDriverDto} payload
  */
 export const createDriver = (deps, payload) => {
-  const { prisma } = deps;
-
-  return prisma.driver.create({ data: payload });
+  console.log(deps);
+  console.log(payload);
 };
 
 /** @param {Deps} deps */

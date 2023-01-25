@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
  * @typedef {import('fastify').RouteOptions} FastifyRoute
  * @typedef {import('./auth.service').AuthService} AuthService
  */
@@ -12,7 +13,7 @@ import { signUpDto } from './dto/sign-up.dto.js';
 export const initAuthController = (authService) => {
   const urlPrefix = '/auth';
 
-  const signUpDriverRoute = {
+  const signUpRoute = {
     method: 'POST',
     schema: {
       body: signUpDto,
@@ -22,9 +23,9 @@ export const initAuthController = (authService) => {
       /** @type {SignUpDto}  */
       const payload = req.body;
 
-      await authService.signUpDriver(payload);
+      await authService.signUpUser(payload);
     },
   };
 
-  return [signUpDriverRoute];
+  return [signUpRoute];
 };

@@ -6,6 +6,7 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "start:dev": "nodemon src/app.js",
     "check": "npx tsc --project tsconfig.json",
     "types": "rm -rf types && npx tsc --project tsconfig.types.json",
     "lint": "eslint .",
@@ -45,6 +46,7 @@
     "@types/ws": "^8.5.3",
     "eslint": "^8.31.0",
     "eslint-config-oldbros": "^1.0.2",
+    "nodemon": "^2.0.20",
     "prisma": "^4.9.0",
     "prisma-json-schema-generator": "^3.1.2",
     "tap": "^16.3.4",
