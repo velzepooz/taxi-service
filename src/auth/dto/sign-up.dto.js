@@ -7,10 +7,10 @@ import { userDto } from './user.dto.js';
  * @property {string} email
  * @property {string} password
  * @property {string} phone
- * @property {string} driverLicenceId
  * @property {Date} dateOfBirth
  */
 export const signUpDto = {
   required: ['firstName', 'lastName', 'email', 'phone', 'password', 'dateOfBirth'],
   ...userDto,
+  additionalProperties: false,
 };

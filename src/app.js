@@ -4,7 +4,7 @@ import { config } from './config.js';
 
 const server = fastify({ logger: true });
 
-const { routes } = initAppModule();
+const { routes } = initAppModule(config);
 
 for (const route of routes) {
   server.route(route);

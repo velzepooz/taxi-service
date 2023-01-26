@@ -11,9 +11,6 @@ export const initDriverController = (driverService) => {
   const createDriverRoute = {
     method: 'POST',
     url: `/${urlPrefix}`,
-    schema: {
-      body: createArticleDto,
-    },
     handler: async (req, res) => {
       const result = await driverService.createDriver();
       const [code, data] = result ? [200, result] : [204, null];

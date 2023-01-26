@@ -1,6 +1,9 @@
 /**
+ * @typedef {import('metasql').Database} Database
  * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
+ * @typedef {import('./user.repository').UserRepository} UserRepository
  * @typedef {object} Deps
+ * @property {UserRepository} userRepository
  *
  * @callback SignUpUser
  * @param {SignUpDto} payload
@@ -17,7 +20,13 @@ import { partial } from '@oldbros/shiftjs';
  * @param {SignUpDto} payload
  */
 export const signUpUser = async (deps, payload) => {
-  await generateHashForPassword(payload.password);
+  const { userRepository } = deps;
+  const passwordHash = await generateHashForPassword(payload.password);
+
+  await userRepository.createUser({
+    ...payload,
+    password: passwordHash,
+  });
 };
 
 /**

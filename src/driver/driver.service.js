@@ -1,8 +1,5 @@
 /**
- * @typedef {import('../prisma/prisma.service').PrismaService} Prisma
- *
  * @typedef {object} Deps
- * @property {Prisma} prisma
  *
  * @callback CreateDriver
  */

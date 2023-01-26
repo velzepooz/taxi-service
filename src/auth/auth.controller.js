@@ -19,11 +19,13 @@ export const initAuthController = (authService) => {
       body: signUpDto,
     },
     url: `${urlPrefix}/signUp`,
-    handler: async (req) => {
+    handler: async (request, reply) => {
       /** @type {SignUpDto}  */
-      const payload = req.body;
+      const payload = request.body;
 
       await authService.signUpUser(payload);
+
+      reply.code(201);
     },
   };
 
