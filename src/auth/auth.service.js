@@ -1,19 +1,38 @@
 /**
  * @typedef {import('metasql').Database} Database
  * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
+ * @typedef {import('./dto/sign-in.dto').SignInDto} SignInDto
+ * @typedef {import('./dto/user.dto').UserDto} UserDto
+ * @typedef {import('../config').Config} Config
  * @typedef {import('./user.repository').UserRepository} UserRepository
+ * @typedef {import('./jwt.service').JwtService} JwtService
  * @typedef {object} Deps
  * @property {UserRepository} userRepository
+ * @property {JwtService} jwtService
+ * @property {Config} config
+ *
+ * @typedef {object} SignInResult
+ * @property {UserDto} user
+ * @property {string} accessCookie
+ * @property {string} refreshCookie
  *
  * @callback SignUpUser
  * @param {SignUpDto} payload
  *
+ * @callback SignInUser
+ * @param {SignInDto} payload
+ * @returns {Promise<SignInResult>}
+ *
  * @typedef {object} AuthService
  * @property {SignUpUser} signUpUser
+ * @property {SignInUser} signInUser
  */
 
 import crypto from 'node:crypto';
+import { promisify } from 'util';
 import { partial } from '@oldbros/shiftjs';
+
+const scrypt = promisify(crypto.scrypt);
 
 /**
  * @param {Deps} deps
@@ -31,22 +50,71 @@ export const signUpUser = async (deps, payload) => {
 
 /**
  * @param {Deps} deps
+ * @param {SignInDto} payload
+ * @return {Promise<SignInResult>}
+ */
+export const signInUser = async (deps, payload) => {
+  const { userRepository, jwtService, config } = deps;
+
+  const user = await userRepository.findOne({ phone: payload.phone });
+
+  if (!user) return { user, accessCookie: '', refreshCookie: '' };
+
+  const isCorrectPassword = await comparePasswords(payload.password, user.password);
+
+  if (!isCorrectPassword) return { user, accessCookie: '', refreshCookie: '' };
+
+  const accessToken = await jwtService.generateJwtToken({
+    data: { id: user.id },
+    secret: config.jwt.accessTokenSecret,
+    expireTime: config.jwt.accessTokenExpireTime,
+  });
+  const refreshToken = await jwtService.generateJwtToken({
+    data: { id: user.id },
+    secret: config.jwt.refreshTokenSecret,
+    expireTime: config.jwt.refreshTokenExpireTime,
+  });
+
+  await userRepository.updateOne({ id: user.id }, { refreshToken });
+
+  return {
+    user,
+    accessCookie:
+      `Authentication=Bearer ${accessToken}; Secure; HttpOnly; Path=/; Max-Age=${config.jwt.accessTokenExpireTime}`,
+    refreshCookie:
+      `Refresh=${refreshToken}; Secure; HttpOnly; Path=/; Max-Age=${config.jwt.refreshTokenExpireTime}`,
+  };
+};
+
+/**
+ * @param {Deps} deps
  * @returns {AuthService}
  */
 export const initAuthService = (deps) => ({
   signUpUser: partial(signUpUser, deps),
+  signInUser: partial(signInUser, deps),
 });
 
 /**
  * @param {string} password
  * @returns {Promise<string>}
  */
-function generateHashForPassword(password) {
-  return new Promise((resolve, reject) => {
-    const salt = crypto.randomBytes(16).toString('base64');
-    crypto.scrypt(password, salt, 64, (err, result) => {
-      if (err) reject(err);
-      resolve(salt + ':' + result.toString('base64'));
-    });
-  });
+async function generateHashForPassword(password) {
+  const salt = crypto.randomBytes(16).toString('base64');
+  const result = await scrypt(password, salt, 64);
+
+  return salt + ':' + result.toString('base64');
+}
+
+/**
+ * @param {string} password
+ * @param {string} hash
+ * @returns {Promise<boolean>}
+ */
+async function comparePasswords(password, hash) {
+  const [salt, key] = hash.split(':');
+  const keyBuffer = Buffer.from(key, 'base64');
+  const derivedKey = await scrypt(password, salt, 64);
+
+  return crypto.timingSafeEqual(keyBuffer, derivedKey);
 }

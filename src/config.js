@@ -12,9 +12,17 @@
  * @property {string} password
  */
 /**
+ * @typedef {object} JWT
+ * @property {string} accessTokenSecret
+ * @property {string} accessTokenExpireTime
+ * @property {string} refreshTokenSecret
+ * @property {string} refreshTokenExpireTime
+ */
+/**
  * @typedef {object} Config
  * @property {ServerConfig} server - config for http server
  * @property {DbConfig} db - config for db connection
+ * @property {JWT} jwt - config for jwt tokens
  */
 /** @type Config */
 export const config = {
@@ -32,5 +40,11 @@ export const config = {
     database: process.env.POSTGRES_DATABASE_NAME || '',
     user: process.env.POSTGRES_USER || '',
     password: process.env.POSTGRES_PASSWORD || '',
+  },
+  jwt: {
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+    accessTokenExpireTime: process.env.ACCESS_TOKEN_EXPIRE_TIME,
+    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+    refreshTokenExpireTime: process.env.REFRESH_TOKEN_EXPIRE_TIME,
   },
 };

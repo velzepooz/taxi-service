@@ -43,6 +43,12 @@
               "type": "null"
             }
           ]
+        },
+        "refreshToken": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },

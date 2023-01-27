@@ -15,23 +15,24 @@ datasource db {
 }
 
 model User {
-  id Int @id@default(autoincrement())
-  createdAt DateTime @default(now()) @db.Timestamptz(0)
-  updatedAt DateTime @updatedAt
-  firstName String
-  lastName String
-  email     String @unique
-  phone     String
-  password String
-  dateOfBirth DateTime @db.Date
-  user Driver?
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @db.Timestamptz(0)
+  updatedAt    DateTime @updatedAt
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phone        String   @unique
+  password     String
+  dateOfBirth  DateTime @db.Date
+  user         Driver?
+  refreshToken String?
 }
 
 model Driver {
-  id Int @id@default(autoincrement())
-  createdAt DateTime @default(now()) @db.Timestamptz(0)
-  updatedAt DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now()) @db.Timestamptz(0)
+  updatedAt       DateTime @updatedAt
   driverLicenceId String
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
+  user            User     @relation(fields: [userId], references: [id])
+  userId          Int      @unique
 }

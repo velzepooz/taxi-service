@@ -9,6 +9,7 @@
  * @property {string} password
  * @property {string} phone
  * @property {Date} dateOfBirth
+ * @property {?string} [refreshToken]
  */
 export const userDto = {
   type: 'object',
@@ -47,6 +48,9 @@ export const userDto = {
     dateOfBirth: {
       type: 'string',
       format: 'date-time',
+    },
+    refreshToken: {
+      type: 'string',
     },
   },
 };

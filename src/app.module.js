@@ -24,7 +24,7 @@ export const initAppModule = (config) => {
       debug: () => console,
     },
   });
-  const { routes: authRoute } = initAuthModule({ queryBuilder });
+  const { routes: authRoute } = initAuthModule({ queryBuilder, config });
   const { routes: driverRoutes } = initDriverModule();
 
   return {
