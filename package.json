@@ -35,6 +35,7 @@
   "dependencies": {
     "@oldbros/shiftjs": "^1.0.0-beta7",
     "@prisma/client": "^4.9.0",
+    "dayjs": "^1.11.7",
     "fastify": "^4.10.2",
     "jose": "^4.11.2",
     "metasql": "^2.1.2",

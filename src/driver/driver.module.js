@@ -8,7 +8,7 @@ import { initDriverController } from './driver.controller.js';
  */
 export const initDriverModule = () => {
   const driverService = initDriverService(null);
-  const driverRoutes = initDriverController(driverService);
+  const driverRoutes = initDriverController();
 
   return {
     services: [driverService],
