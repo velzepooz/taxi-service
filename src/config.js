@@ -42,9 +42,9 @@ export const config = {
     password: process.env.POSTGRES_PASSWORD || '',
   },
   jwt: {
-    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
-    accessTokenExpireTime: process.env.ACCESS_TOKEN_EXPIRE_TIME,
-    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
-    refreshTokenExpireTime: process.env.REFRESH_TOKEN_EXPIRE_TIME,
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET || '',
+    accessTokenExpireTime: process.env.ACCESS_TOKEN_EXPIRE_TIME || '15m',
+    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET || '',
+    refreshTokenExpireTime: process.env.REFRESH_TOKEN_EXPIRE_TIME || '1d',
   },
 };
