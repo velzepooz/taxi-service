@@ -53,18 +53,6 @@ export class Faker {
     return this._chance.hash({ length });
   }
 
-  password(length = 10) {
-    return (
-      'a1' +
-      this._chance.string({
-        length,
-        alpha: true,
-        numeric: true,
-        symbols: false,
-      })
-    );
-  }
-
   url() {
     return this._chance.url();
   }

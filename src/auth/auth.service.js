@@ -12,7 +12,7 @@
  * @property {Config} config
  *
  * @typedef {object} SignInResult
- * @property {UserDto} user
+ * @property {UserDto | null} user
  * @property {string} accessCookie
  * @property {string} refreshCookie
  *
@@ -55,11 +55,11 @@ export const signInUser = async (deps, payload) => {
 
   const user = await userRepository.findOne({ phone: payload.phone });
 
-  if (!user) return { user, accessCookie: '', refreshCookie: '' };
+  if (!user) return { user:  null, accessCookie: '', refreshCookie: '' };
 
   const isCorrectPassword = await comparePasswords(payload.password, user.password);
 
-  if (!isCorrectPassword) return { user, accessCookie: '', refreshCookie: '' };
+  if (!isCorrectPassword) return { user: null, accessCookie: '', refreshCookie: '' };
 
   const accessToken = await jwtService.generateJwtToken({
     data: { id: user.id },
@@ -75,7 +75,10 @@ export const signInUser = async (deps, payload) => {
   await userRepository.updateOne({ id: user.id }, { refreshToken });
 
   return {
-    user,
+    user: {
+      ...user,
+      password: null,
+    },
     accessCookie:
       `Authentication=Bearer ${accessToken}; Secure; HttpOnly; Path=/; Max-Age=${config.jwt.accessTokenExpireTime}`,
     refreshCookie:
