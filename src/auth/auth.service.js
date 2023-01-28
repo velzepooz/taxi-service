@@ -28,11 +28,8 @@
  * @property {SignInUser} signInUser
  */
 
-import crypto from 'node:crypto';
-import { promisify } from 'util';
 import { partial } from '@oldbros/shiftjs';
-
-const scrypt = promisify(crypto.scrypt);
+import { comparePasswords, generateHashForPassword } from '../utils/crypto.utils.js';
 
 /**
  * @param {Deps} deps
@@ -94,27 +91,3 @@ export const initAuthService = (deps) => ({
   signUpUser: partial(signUpUser, deps),
   signInUser: partial(signInUser, deps),
 });
-
-/**
- * @param {string} password
- * @returns {Promise<string>}
- */
-async function generateHashForPassword(password) {
-  const salt = crypto.randomBytes(16).toString('base64');
-  const result = await scrypt(password, salt, 64);
-
-  return salt + ':' + result.toString('base64');
-}
-
-/**
- * @param {string} password
- * @param {string} hash
- * @returns {Promise<boolean>}
- */
-async function comparePasswords(password, hash) {
-  const [salt, key] = hash.split(':');
-  const keyBuffer = Buffer.from(key, 'base64');
-  const derivedKey = await scrypt(password, salt, 64);
-
-  return crypto.timingSafeEqual(keyBuffer, derivedKey);
-}
