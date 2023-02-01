@@ -15,7 +15,6 @@ export class Faker {
     state(): any;
     city(): any;
     hash(length?: number): any;
-    password(length?: number): string;
     url(): any;
 }
 export const faker: Faker;

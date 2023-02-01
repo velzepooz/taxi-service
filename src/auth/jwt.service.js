@@ -1,53 +1,32 @@
+/**
+ * @typedef {import('../../types/src/auth/jwt.service').JwtService} JwtService
+ * @typedef {import('../../types/src/auth/jwt.service').GenerateJwtToken} GenerateJwtToken
+ * @typedef {import('../../types/src/auth/jwt.service').VerifyJwtToken} VerifyJwtToken
+ */
 import * as jose from 'jose';
-/**
- * @typedef {Function} GenerateJwtToken
- * @property {object} data
- * @property {string} secret
- * @property {?string} expireTime
- * @returns {Promise<string>}
- */
-/**
- * @typedef {Function} VerifyJwt
- * @property {string} jwtToken
- * @property {string} secret
- * @returns {Promise<any>}
- */
-/**
- *
- * @typedef {object} JwtService
- * @property {GenerateJwtToken} generateJwtToken
- * @property {VerifyJwt} verifyJwt
- */
 
 /** @type {GenerateJwtToken} */
-const generateJwtToken = async ({ data, secret, expireTime = '1000h' }) => {
+const generateJwtToken = async ({ payload, secret, expireTime = '1000h' }) => {
   const key = new TextEncoder().encode(
     secret,
   );
 
-  return new jose.SignJWT(data)
+  return new jose.SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(expireTime)
     .sign(key);
 };
 
-/** @type {VerifyJwt}  */
+/** @type {VerifyJwtToken} */
 const verifyJwt = async (jwtToken, secret) => {
   const encodedSecret = new TextEncoder().encode(
     secret,
   );
 
-  try {
-    const { payload } = await jose.jwtVerify(jwtToken, encodedSecret);
-
-    return payload;
-  } catch (e) {
-    console.error(e);
-
-    return null;
-  }
-
+  return jose.jwtVerify(jwtToken, encodedSecret)
+    .then(({ payload }) => payload)
+    .catch(console.error);
 };
 
 /**

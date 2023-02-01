@@ -1,8 +1,7 @@
-export function initAuthModule({ queryBuilder, config }: Deps): Module;
-export type Database = import('metasql').Database;
-export type Module = import('../app.module').AppModule;
-export type Config = import('../config').Config;
+import {Database} from "metasql";
+import { Config } from '../config';
+
 export type Deps = {
-    queryBuilder: Database;
-    config: Config;
-};
+  queryBuilder: Database;
+  config: Config;
+}

@@ -1,7 +1,5 @@
 /**
- * @typedef {import('metasql').Database} Database
  * @typedef {import('../app.module').AppModule} Module
- * @typedef {import('../config').Config} Config
  */
 
 import { initAuthController } from './auth.controller.js';
@@ -10,21 +8,15 @@ import { initUserRepository } from './user.repository.js';
 import { initJwtService } from './jwt.service.js';
 
 /**
- * @typedef {object} Deps
- * @property {Database} queryBuilder
- * @property {Config} config
- */
-
-/**
  * Auth module
- * @param {Deps} deps
+ * @param {import('../../types/src/auth/auth.module').Deps} deps
  * @returns {Module}
  */
-export const initAuthModule = ({ queryBuilder, config }) => {
+export const initAuthModule = ({ queryBuilder }) => {
   const userRepository = initUserRepository({ queryBuilder });
   const jwtService = initJwtService();
-  const authService = initAuthService({ userRepository, jwtService, config });
-  const authRoutes = initAuthController(authService);
+  const authService = initAuthService({ userRepository, jwtService });
+  const authRoutes = initAuthController(authService, jwtService);
 
   return {
     services: [],

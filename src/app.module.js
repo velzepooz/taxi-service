@@ -1,6 +1,6 @@
 /**
  * @typedef {import('fastify').RouteOptions} FastifyRoute
- * @typedef {import('./config').Config} Config
+ * @typedef {import('../types/src/config').Config} Config
  */
 /**
  * @typedef {object} AppModule

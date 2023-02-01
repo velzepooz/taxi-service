@@ -8,7 +8,6 @@
     "start": "node src/app.js",
     "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/app.js",
     "check": "npx tsc --project tsconfig.json",
-    "types": "rm -rf types && npx tsc --project tsconfig.types.json",
     "lint": "eslint .",
     "fmt": "eslint --fix .",
     "docs": "npx typedoc --entryPointStrategy packages .",
@@ -33,6 +32,7 @@
     "node": "18"
   },
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
     "@oldbros/shiftjs": "^1.0.0-beta7",
     "@prisma/client": "^4.9.0",
     "dayjs": "^1.11.7",

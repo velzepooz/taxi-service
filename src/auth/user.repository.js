@@ -1,44 +1,11 @@
 /**
- * @typedef {import('metasql').Database} Database
- * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
- * @typedef {import('./dto/user.dto').UserDto} UserDto
- * @typedef {object} Deps
- * @property {Database} queryBuilder
- *
- * @typedef {SignUpDto} UserToCreate
- *
- * @typedef {object} UserToUpdate
- * @property {?string} [id]
- * @property {?string} [createdAt]
- * @property {?string} [updatedAt]
- * @property {?string} [firstName]
- * @property {?string} [lastName]
- * @property {?string} [email]
- * @property {?string} [password]
- * @property {?string} [phone]
- * @property {?Date} [dateOfBirth]
- * @property {?string} [refreshToken]
- *
- * @typedef {object} FindOneCondition
- * @property {?string} [id]
- * @property {?string} [email]
- * @property {?string} [password]
- * @property {?string} [phone]
- *
- * @callback CreateUser
- * @param {UserToCreate} userToCreate
- *
- * @callback FindOne
- * @param {FindOneCondition} conditions
- *
- * @callback UpdateOne
- * @param {FindOneCondition} conditions
- * @param {UserToUpdate} updateData
- *
- * @typedef {object} UserRepository
- * @property {CreateUser} createUser
- * @property {FindOne} findOne
- * @property {UpdateOne} updateOne
+ * @typedef {import('../../types/src/auth/dto/user.dto').UserDto} UserDto
+ * @typedef {import('../../types/src/auth/user.repository').Deps} Deps
+ * @typedef {import('../../types/src/auth/user.repository').UserToCreate} UserToCreate
+ * @typedef {import('../../types/src/auth/user.repository').UserToUpdate} UserToUpdate
+ * @typedef {import('../../types/src/auth/user.repository').FindOneCondition} FindOneCondition
+ * @typedef {import('../../types/src/auth/user.repository').User} User
+ * @typedef {import('../../types/src/auth/user.repository').UserRepository} UserRepository
  */
 
 import { partial } from '@oldbros/shiftjs';
@@ -60,7 +27,7 @@ export const createUser = async ({ queryBuilder }, userToCreate) => {
  * @returns {Promise<UserDto|null>}
  */
 export const findOne = async ({ queryBuilder }, conditions) => {
-  /** @type {*[]} UserDto */
+  /** @type {*} User[] */
   const result = await queryBuilder
     .select('User', ...Object.entries(conditions).map(([field, value]) => ({ [field]: value })));
 
@@ -68,9 +35,8 @@ export const findOne = async ({ queryBuilder }, conditions) => {
 };
 
 /**
- *
  * @param {Deps} deps
- * @param {FindOne} conditions
+ * @param {FindOneCondition} conditions
  * @param {UserToUpdate} updateData
  * @returns {Promise<void>}
  */

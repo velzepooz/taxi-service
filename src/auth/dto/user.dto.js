@@ -1,16 +1,3 @@
-/**
- * @typedef {object} UserDto
- * @property {?string} id
- * @property {?string} createdAt
- * @property {?string} updatedAt
- * @property {string} firstName
- * @property {string} lastName
- * @property {string} email
- * @property {string} password
- * @property {string} phone
- * @property {Date} dateOfBirth
- * @property {?string} [refreshToken]
- */
 export const userDto = {
   type: 'object',
   properties: {

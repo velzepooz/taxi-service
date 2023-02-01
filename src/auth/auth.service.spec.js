@@ -23,7 +23,7 @@ describe('On authService', () => {
     });
     userRepository = initUserRepository({ queryBuilder });
     const jwtService = initJwtService();
-    authService = initAuthService({ userRepository, jwtService, config });
+    authService = initAuthService({ userRepository, jwtService });
   });
 
   describe('On signUpUser', async () => {
@@ -35,7 +35,7 @@ describe('On authService', () => {
         lastName: faker.lastName(),
         email: faker.email(),
         phone: faker.mobilePhone(),
-        password: faker.password(),
+        password: faker.string(),
         dateOfBirth: new Date(),
       };
     });

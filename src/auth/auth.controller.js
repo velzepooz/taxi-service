@@ -1,18 +1,21 @@
 /**
- * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
- * @typedef {import('./dto/sign-in.dto').SignInDto} SignInDto
  * @typedef {import('fastify').RouteOptions} FastifyRoute
- * @typedef {import('./auth.service').AuthService} AuthService
+ * @typedef {import('../../types/src/auth/dto/sign-up.dto').SignUpDto} SignUpDto
+ * @typedef {import('../../types/src/auth/dto/sign-in.dto').SignInDto} SignInDto
+ * @typedef {import('../../types/src/auth/auth.service').AuthService} AuthService
  */
 
 import { signUpDto } from './dto/sign-up.dto.js';
 import { signInDto } from './dto/sign-in.dto.js';
+import { jwtConfig } from './config.js';
+import { UnauthorizedException } from './auth.exceptions.js';
 
 /**
- * @param {AuthService} authService
+ * @param {import('../../types/src/auth/auth.service').AuthService} authService
+ * @param {import('../../types/src/auth/jwt.service').JwtService} jwtService
  * @returns {FastifyRoute[]}
  */
-export const initAuthController = (authService) => {
+export const initAuthController = (authService, jwtService) => {
   const urlPrefix = '/auth';
 
   const signUpRoute = {
@@ -50,5 +53,27 @@ export const initAuthController = (authService) => {
     },
   };
 
-  return [signUpRoute, signInRoute];
+  const refreshRoute = {
+    method: 'POST',
+    onRequest: async (request) => {
+      const { Refresh } = request.cookies;
+
+      const data = await jwtService.verifyJwt(Refresh, jwtConfig.refreshTokenSecret);
+
+      if (!data) {
+        throw new UnauthorizedException('Unauthorized');
+      }
+
+      request.userId = data.id;
+    },
+    url: `${urlPrefix}/refresh`,
+    handler: async (request, reply) => {
+      const result = await authService.refreshAccessToken(request.userId);
+
+      reply.header('set-cookie', result);
+      reply.code(200);
+    },
+  };
+
+  return [signUpRoute, signInRoute, refreshRoute];
 };

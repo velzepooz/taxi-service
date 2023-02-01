@@ -1,39 +1,24 @@
 /**
- * @typedef {import('metasql').Database} Database
- * @typedef {import('./dto/sign-up.dto').SignUpDto} SignUpDto
- * @typedef {import('./dto/sign-in.dto').SignInDto} SignInDto
- * @typedef {import('./dto/user.dto').UserDto} UserDto
- * @typedef {import('../config').Config} Config
- * @typedef {import('./user.repository').UserRepository} UserRepository
- * @typedef {import('./jwt.service').JwtService} JwtService
- * @typedef {object} Deps
- * @property {UserRepository} userRepository
- * @property {JwtService} jwtService
- * @property {Config} config
- *
- * @typedef {object} SignInResult
- * @property {UserDto | null} user
- * @property {string} accessCookie
- * @property {string} refreshCookie
- *
- * @callback SignUpUser
- * @param {SignUpDto} payload
- *
- * @callback SignInUser
- * @param {SignInDto} payload
- * @returns {Promise<SignInResult>}
- *
- * @typedef {object} AuthService
- * @property {SignUpUser} signUpUser
- * @property {SignInUser} signInUser
+ * @typedef {import('../../types/src/auth/auth.service').Deps} Deps
+ * @typedef {import('../../types/src/auth/auth.service').AuthService} AuthService
+ * @typedef {import('../../types/src/auth/auth.service').SignInResult} SignInResult
+ * @typedef {import('../../types/src/auth/dto/sign-up.dto').SignUpDto} SignUpDto
+ * @typedef {import('../../types/src/auth/dto/sign-in.dto').SignInDto} SignInDto
+ * @typedef {import('../../types/src/auth/dto/user.dto').UserDto} UserDto
+ * @typedef {import('../../types/src/auth/user.repository').UserRepository} UserRepository
+ * @typedef {import('../../types/src/auth/user.repository').User} User
+ * @typedef {import('../../types/src/auth/jwt.service').JwtService} JwtService
  */
 
 import { partial } from '@oldbros/shiftjs';
 import { comparePasswords, generateHashForPassword } from '../utils/crypto.utils.js';
+import { InvalidPasswordException, UserNotFoundException } from './auth.exceptions.js';
+import { jwtConfig } from './config.js';
 
 /**
  * @param {Deps} deps
  * @param {SignUpDto} payload
+ * @returns {Promise<void>}
  */
 export const signUpUser = async (deps, payload) => {
   const { userRepository } = deps;
@@ -51,25 +36,25 @@ export const signUpUser = async (deps, payload) => {
  * @return {Promise<SignInResult>}
  */
 export const signInUser = async (deps, payload) => {
-  const { userRepository, jwtService, config } = deps;
+  const { userRepository, jwtService } = deps;
 
   const user = await userRepository.findOne({ phone: payload.phone });
 
-  if (!user) return { user:  null, accessCookie: '', refreshCookie: '' };
+  if (!user) throw new UserNotFoundException('User not found');
 
   const isCorrectPassword = await comparePasswords(payload.password, user.password);
 
-  if (!isCorrectPassword) return { user: null, accessCookie: '', refreshCookie: '' };
+  if (!isCorrectPassword) throw new InvalidPasswordException('Invalid password');
 
   const accessToken = await jwtService.generateJwtToken({
-    data: { id: user.id },
-    secret: config.jwt.accessTokenSecret,
-    expireTime: config.jwt.accessTokenExpireTime,
+    payload: { id: user.id },
+    secret: jwtConfig.accessTokenSecret,
+    expireTime: jwtConfig.accessTokenExpireTime,
   });
   const refreshToken = await jwtService.generateJwtToken({
-    data: { id: user.id },
-    secret: config.jwt.refreshTokenSecret,
-    expireTime: config.jwt.refreshTokenExpireTime,
+    payload: { id: user.id },
+    secret: jwtConfig.refreshTokenSecret,
+    expireTime: jwtConfig.refreshTokenExpireTime,
   });
 
   await userRepository.updateOne({ id: user.id }, { refreshToken });
@@ -79,12 +64,43 @@ export const signInUser = async (deps, payload) => {
       ...user,
       password: null,
     },
-    accessCookie:
-      `Authentication=Bearer ${accessToken}; Secure; HttpOnly; Path=/; Max-Age=${config.jwt.accessTokenExpireTime}`,
-    refreshCookie:
-      `Refresh=${refreshToken}; Secure; HttpOnly; Path=/; Max-Age=${config.jwt.refreshTokenExpireTime}`,
+    accessCookie: getAccessTokenCookie(accessToken, jwtConfig.accessTokenExpireTime),
+    refreshCookie: getRefreshTokenCookie(refreshToken, jwtConfig.refreshTokenExpireTime),
   };
 };
+
+/**
+ * @param {Deps} deps
+ * @param {number} userId
+ * @returns {Promise<string>}
+ */
+export const refreshAccessToken = async ({ jwtService }, userId) => {
+  const accessToken = await jwtService.generateJwtToken({
+    payload: { id: userId },
+    secret: jwtConfig.accessTokenSecret,
+    expireTime: jwtConfig.accessTokenExpireTime,
+  });
+
+  return getAccessTokenCookie(accessToken, jwtConfig.accessTokenExpireTime);
+};
+
+/**
+ * @param {string} accessToken
+ * @param {string} accessTokenExpireTime
+ * @returns {string}
+ */
+function getAccessTokenCookie(accessToken, accessTokenExpireTime) {
+  return `Authentication=Bearer ${accessToken}; Secure; HttpOnly; Path=/; Max-Age=${accessTokenExpireTime};`;
+}
+
+/**
+ * @param {string} refreshToken
+ * @param {string} refreshTokenExpireTime
+ * @returns {string}
+ */
+function getRefreshTokenCookie(refreshToken, refreshTokenExpireTime) {
+  return `Refresh=${refreshToken}; Secure; HttpOnly; Path=/; Max-Age=${refreshTokenExpireTime};`;
+}
 
 /**
  * @param {Deps} deps
@@ -93,4 +109,5 @@ export const signInUser = async (deps, payload) => {
 export const initAuthService = (deps) => ({
   signUpUser: partial(signUpUser, deps),
   signInUser: partial(signInUser, deps),
+  refreshAccessToken: partial(refreshAccessToken, deps),
 });

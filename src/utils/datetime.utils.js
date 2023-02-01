@@ -9,4 +9,8 @@ dayjs.extend(utc);
  */
 export const getDateByUTCISOString = (date = new Date()) => dayjs.utc(date).toISOString();
 
+/**
+ * @param date
+ * @return {Date}
+ */
 export const getStartOfDay = (date = new Date()) => dayjs(date).startOf('days').toDate();

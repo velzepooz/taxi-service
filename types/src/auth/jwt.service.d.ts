@@ -1,7 +1,14 @@
-export function initJwtService(): JwtService;
-export type GenerateJwtToken = Function;
-export type VerifyJwt = Function;
-export type JwtService = {
-    generateJwtToken: GenerateJwtToken;
-    verifyJwt: VerifyJwt;
+import {JWTPayload} from "jose";
+
+export type GenerateTokenData = {
+  payload:  any;
+  secret: string;
+  expireTime?: string;
 };
+export type GenerateJwtToken = (data: GenerateTokenData) => Promise<string>;
+export type VerifyJwtToken = <T>(jwtToken: string, encodedSecret: string) => Promise<JWTPayload | void>;
+
+export interface JwtService {
+  generateJwtToken: GenerateJwtToken;
+  verifyJwt: VerifyJwtToken;
+}

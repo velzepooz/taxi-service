@@ -22,6 +22,7 @@ export const driverDto = {
     },
     driverLicenceId: {
       type: 'string',
+      // driver license format. e.g. first 2 letter A-Z, then 7 digits
       pattern: '^[A-Z]{2}\\d{7}$',
     },
     userId: {
