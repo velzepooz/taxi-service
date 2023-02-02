@@ -85,6 +85,16 @@ export const refreshAccessToken = async ({ jwtService }, userId) => {
 };
 
 /**
+ *
+ * @param {Deps} deps
+ * @param {number} userId
+ * @return {Promise<void>}
+ */
+export const signOut = async ({ userRepository }, userId) => {
+  await userRepository.updateOne({ id: userId }, { refreshToken: null });
+};
+
+/**
  * @param {string} accessToken
  * @param {string} accessTokenExpireTime
  * @returns {string}
@@ -110,4 +120,5 @@ export const initAuthService = (deps) => ({
   signUpUser: partial(signUpUser, deps),
   signInUser: partial(signInUser, deps),
   refreshAccessToken: partial(refreshAccessToken, deps),
+  signOut: partial(signOut, deps),
 });

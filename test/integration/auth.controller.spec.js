@@ -85,5 +85,25 @@ describe('On authController', () => {
       assert.match(response.headers['set-cookie'][0], /^Authentication=/);
       assert.match(response.headers['set-cookie'][1], /^Refresh=/);
     });
+
+    it('Should return error if invalid password', async () => {
+      signInPayload.password = faker.string();
+      const response = await app.inject({ headers: { 'content-type': 'application/json' } })
+        .post('/auth/signIn')
+        .payload(signInPayload);
+
+      assert.strictEqual(response.json().message, 'Invalid password');
+      assert.strictEqual(response.headers['set-cookie'], undefined);
+    });
+
+    it('Should return error if no such user exists', async () => {
+      signInPayload.phone = faker.mobilePhone();
+      const response = await app.inject({ headers: { 'content-type': 'application/json' } })
+        .post('/auth/signIn')
+        .payload(signInPayload);
+
+      assert.strictEqual(response.json().message, 'User not found');
+      assert.strictEqual(response.headers['set-cookie'], undefined);
+    });
   });
 });
