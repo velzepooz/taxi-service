@@ -9,5 +9,9 @@ export type Config = {
     database: string;
     user: string;
     password: string;
+    logger: {
+      db: Function;
+      debug: Function;
+    }
   };
 };

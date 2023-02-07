@@ -1,16 +1,23 @@
+/** @typedef {import('fastify').FastifyServerOptions} FastifyServerOptions */
+
 import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
-import { initAppModule } from './app.module.js';
-import { config } from './config.js';
+import { initControllers } from './init-controllers.js';
 
-const server = fastify({ logger: true });
+/**
+ * Build fastify app
+ * @param {FastifyServerOptions} opts
+ */
+export const buildApp = (opts = { logger: true }) => {
+  const app = fastify(opts);
 
-server.register(fastifyCookie);
+  app.register(fastifyCookie);
 
-const { routes } = initAppModule(config);
+  const routes = initControllers();
 
-for (const route of routes) {
-  server.route(route);
-}
+  for (const route of routes) {
+    app.route(route);
+  }
 
-await server.listen(config.server);
+  return app;
+};
