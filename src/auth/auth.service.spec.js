@@ -5,10 +5,10 @@ import { faker } from '../../test/utils/faker.js';
 import { initDbQueryBuilder } from '../db.js';
 import { getStartOfDay } from '../utils/datetime.utils.js';
 import { createUser } from '../../test/factories/user.factory.js';
+import { ApplicationError } from '../application.error.js';
 import { initUserRepository } from './user.repository.js';
 import { initAuthService } from './auth.service.js';
 import { initJwtService } from './jwt.service.js';
-import { InvalidPasswordException, UserNotFoundException } from './auth.exceptions.js';
 
 describe('On authService', () => {
   let queryBuilder,
@@ -86,13 +86,13 @@ describe('On authService', () => {
     it('Should throw error if no such user', async () => {
       signInPayload.phone = faker.mobilePhone();
 
-      assert.rejects(authService.signInUser(signInPayload), UserNotFoundException);
+      assert.rejects(authService.signInUser(signInPayload), ApplicationError);
     });
 
     it('Should throw error if password invalid', async () => {
       signInPayload.password = faker.string();
 
-      assert.rejects(authService.signInUser(signInPayload), InvalidPasswordException);
+      assert.rejects(authService.signInUser(signInPayload), ApplicationError);
     });
   });
 

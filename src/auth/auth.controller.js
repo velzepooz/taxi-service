@@ -7,11 +7,9 @@
  * @typedef {import('../../types/src/common.types').RequestWithUserId} RequestWithUserId
  */
 
+import { accessTokenHook, refreshTokenHook } from '../hooks.js';
 import { signUpDto } from './dto/sign-up.dto.js';
 import { signInDto } from './dto/sign-in.dto.js';
-import { jwtConfig } from './config.js';
-import { UnauthorizedException } from './auth.exceptions.js';
-import { initJwtGuard } from './jwt.guard.js';
 
 /**
  * @param {import('../../types/src/auth/auth.service').AuthService} authService
@@ -20,7 +18,6 @@ import { initJwtGuard } from './jwt.guard.js';
  */
 export const initAuthController = (authService, jwtService) => {
   const urlPrefix = '/auth';
-  const jwtGuard = initJwtGuard(jwtService);
 
   const signUpRoute = {
     method: 'POST',
@@ -60,17 +57,7 @@ export const initAuthController = (authService, jwtService) => {
   const refreshRoute = {
     method: 'POST',
     url: `${urlPrefix}/refresh`,
-    onRequest: async (request) => {
-      const { Refresh } = request.cookies;
-
-      const data = await jwtService.verifyJwt(Refresh, jwtConfig.refreshTokenSecret);
-
-      if (!data) {
-        throw new UnauthorizedException('Unauthorized');
-      }
-
-      request.userId = data.id;
-    },
+    onRequest: refreshTokenHook(jwtService),
     /**
      * @param {RequestWithUserId} request
      * @param {FastifyReply} reply
@@ -87,7 +74,7 @@ export const initAuthController = (authService, jwtService) => {
   const signOutRoute = {
     method: 'POST',
     url: `${urlPrefix}/signOut`,
-    onRequest: jwtGuard,
+    onRequest: accessTokenHook(jwtService),
     /**
      * @param {RequestWithUserId} request
      * @param {FastifyReply} reply

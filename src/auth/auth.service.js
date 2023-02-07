@@ -12,7 +12,7 @@
 
 import { partial } from '@oldbros/shiftjs';
 import { comparePasswords, generateHashForPassword } from '../utils/crypto.utils.js';
-import { InvalidPasswordException, UserNotFoundException } from './auth.exceptions.js';
+import { ApplicationError } from '../application.error.js';
 import { jwtConfig } from './config.js';
 
 /**
@@ -40,11 +40,11 @@ export const signInUser = async (deps, payload) => {
 
   const user = await userRepository.findOne({ phone: payload.phone });
 
-  if (!user) throw new UserNotFoundException('User not found');
+  if (!user) throw new ApplicationError('User not found');
 
   const isCorrectPassword = await comparePasswords(payload.password, user.password);
 
-  if (!isCorrectPassword) throw new InvalidPasswordException('Invalid password');
+  if (!isCorrectPassword) throw new ApplicationError('Invalid password');
 
   const accessToken = await jwtService.generateJwtToken({
     payload: { id: user.id },

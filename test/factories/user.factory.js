@@ -1,4 +1,4 @@
-/** @typedef {import('../../src/auth/dto/user.dto').UserDto} UserDto */
+/** @typedef {import('../../types/src/auth/dto/user.dto').UserDto} UserDto */
 
 import { config } from '../../src/config.js';
 import { initDbQueryBuilder } from '../../src/db.js';
@@ -24,8 +24,8 @@ const queryBuilder = initDbQueryBuilder({
  */
 
 /**
- * @param {CreateUserData} userData
- * @returns {UserDto}
+ * @param {Partial<CreateUserData>} userData
+ * @returns {Promise<UserDto>}
  */
 export const createUser = async ({
   firstName = faker.firstName(),
@@ -33,9 +33,10 @@ export const createUser = async ({
   email = faker.email(),
   phone = faker.mobilePhone(),
   password = faker.string(),
-  dateOfBirth = new Date().toISOString(),
+  dateOfBirth = new Date(),
 }) => {
   const passwordHash = await generateHashForPassword(password);
+  /** @type {*} */
   const result = await queryBuilder.insert('User', {
     firstName,
     lastName,
