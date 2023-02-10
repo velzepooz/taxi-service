@@ -1,10 +1,13 @@
-export function createDriver(deps: Deps, payload: any): void;
-export function initDriverService(deps: Deps): {
-    /** @type {CreateDriver} */
-    createDriver: CreateDriver;
+import {Driver, DriverRepository} from "./driver.repository";
+import { CreateDriverDto } from "./dto/create-driver.dto";
+import {CarRepository} from "../car/car.repository";
+
+export type Deps = {
+  driverRepository: DriverRepository;
+  carRepository: CarRepository;
 };
-export type Deps = object;
-export type CreateDriver = () => any;
+
+export type CreateDriver = (payload: CreateDriverDto, userId: number) => Promise<Driver>;
 export type DriverService = {
-    createDriver: CreateDriver;
+  createDriver: CreateDriver;
 };
