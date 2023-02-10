@@ -7,6 +7,7 @@ import { config } from './config.js';
 import { initDriverRepository } from './driver/driver.repository.js';
 import { initDriverService } from './driver/driver.service.js';
 import { initCarRepository } from './car/car.repository.js';
+import { initCarService } from './car/car.service.js';
 
 /** @type {import('../types/src/di-container').DiContainer} */
 const container = diContainer.default({
@@ -19,6 +20,7 @@ const container = diContainer.default({
   driverRepository: ({ queryBuilder }) => initDriverRepository({ queryBuilder }),
   carRepository: ({ queryBuilder }) => initCarRepository({ queryBuilder }),
   driverService: ({ driverRepository, carRepository }) => initDriverService({ driverRepository, carRepository }),
+  carService: ({ carRepository }) => initCarService({ carRepository }),
 });
 
 export default container;

@@ -5,7 +5,7 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
-import { ApplicationError } from '../application.error.js';
+import { ApplicationError } from '../shared/application.error.js';
 
 /**
  * @param {Deps} deps

@@ -5,6 +5,7 @@ import {AuthService} from "./auth/auth.service";
 import {DriverRepository} from "./driver/driver.repository";
 import {DriverService} from "./driver/driver.service";
 import {CarRepository} from "./car/car.repository";
+import {CarService} from "./car/car.service";
 
 export type DiContainer = {
   queryBuilder: Database;
@@ -14,4 +15,5 @@ export type DiContainer = {
   driverRepository: DriverRepository;
   driverService: DriverService;
   carRepository: CarRepository;
+  carService: CarService;
 };
