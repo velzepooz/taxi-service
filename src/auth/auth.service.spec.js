@@ -5,7 +5,7 @@ import { faker } from '../../test/utils/faker.js';
 import { initDbQueryBuilder } from '../db.js';
 import { getStartOfDay } from '../utils/datetime.utils.js';
 import { createUser } from '../../test/factories/user.factory.js';
-import { ApplicationError } from '../application.error.js';
+import { ApplicationError } from '../shared/application.error.js';
 import { initUserRepository } from './user.repository.js';
 import { initAuthService } from './auth.service.js';
 import { initJwtService } from './jwt.service.js';

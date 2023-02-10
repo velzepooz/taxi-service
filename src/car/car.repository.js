@@ -15,8 +15,21 @@ export const getCarById = async ({ queryBuilder }, id) => {
 
 /**
  * @param {Deps} deps
+ * @param {number} limit
+ * @param {number} offset
+ * @returns {Promise<Car[]>}
+ */
+export const getCarsList = async ({ queryBuilder }, limit, offset) => queryBuilder
+  .select('Car', ['*'])
+  .desc('year')
+  .offset(offset)
+  .limit(limit);
+
+/**
+ * @param {Deps} deps
  * @returns {CarRepository}
  */
 export const initCarRepository = (deps) => ({
   getCarById: partial(getCarById, deps),
+  getCarsList: partial(getCarsList, deps),
 });
