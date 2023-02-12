@@ -1,5 +1,8 @@
+/**
+ * @typedef {import('../../types/src/di-container').DiContainer} DiContainer
+ */
 import { accessTokenHook } from '../hooks.js';
-import { paginationDto } from '../shared/pagination.dto.js';
+import { getCarsListDto } from './dto/get-cars-list.dto.js';
 
 /**
  * @param {DiContainer} container
@@ -12,14 +15,12 @@ export const initCarController = (container) => {
   const getCarsListRoute = {
     method: 'GET',
     schema: {
-      querystring: paginationDto,
+      querystring: getCarsListDto,
     },
     url: `${urlPrefix}/list`,
     onRequest: accessTokenHook,
     handler: async (request, reply) => {
-      const { page, perPage } = request.query;
-
-      const cars = await carService.getCarsList(page, perPage);
+      const cars = await carService.getCarsList(request.query);
       reply.code(200).send(cars);
     },
   };

@@ -11,7 +11,13 @@ export type Deps = {
   queryBuilder: Database
 }
 
-export type GetCarsList = (take: number, skip: number) => Promise<Car[]>;
+export type GetCarsListQueryParams = {
+  limit: number;
+  offset: number;
+  search: string;
+}
+
+export type GetCarsList = (queryParams: GetCarsListQueryParams) => Promise<Car[]>;
 export type GetCarById = (id: number) => Promise<Car> | null;
 
 export interface CarRepository {

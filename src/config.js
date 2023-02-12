@@ -15,8 +15,8 @@ export const config = {
     user: process.env.POSTGRES_USER || '',
     password: process.env.POSTGRES_PASSWORD || '',
     logger: {
-      db: process.env.DEBUG ? console.log : () => {},
-      debug: process.env.DEBUG ? console.log : () => {},
+      db: !!process.env.SHOW_SQL ? console.log : () => {},
+      debug: !!process.env.SHOW_SQL ? console.log : () => {},
     },
   },
 };
