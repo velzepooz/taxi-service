@@ -3,6 +3,7 @@
  */
 import { accessTokenHook } from '../hooks.js';
 import { getCarsListDto } from './dto/get-cars-list.dto.js';
+import { carsListDto } from './dto/cars-list.dto.js';
 
 /**
  * @param {DiContainer} container
@@ -16,6 +17,9 @@ export const initCarController = (container) => {
     method: 'GET',
     schema: {
       querystring: getCarsListDto,
+      response: {
+        default: carsListDto,
+      },
     },
     url: `${urlPrefix}/list`,
     onRequest: accessTokenHook,
