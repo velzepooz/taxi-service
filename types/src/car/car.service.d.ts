@@ -10,7 +10,13 @@ export type GetCarsListParams = {
   search: string;
 };
 
-export type GetCarsList = (params: GetCarsListParams) => Promise<Car[]>;
+export type CarsList = {
+  cars: Car[];
+  totalPages: number;
+  currentPage: number;
+};
+
+export type GetCarsList = (params: GetCarsListParams) => Promise<CarsList>;
 
 export interface CarService {
   getCarsList: GetCarsList;

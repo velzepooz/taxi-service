@@ -13,8 +13,17 @@ import { partial } from '@oldbros/shiftjs';
  * @param {GetCarsListParams} getListParams
  * @returns {Promise<Car[]>}
  */
-export const getCarsList = async ({ carRepository }, { page, perPage, search }) => carRepository
-  .getCarsList({ limit: perPage, offset: (page - 1) * perPage, search });
+export const getCarsList = async ({ carRepository }, { page, perPage, search }) => {
+  const cars = await carRepository
+    .getCarsList({ limit: perPage, offset: (page - 1) * perPage, search });
+  const carsCount = await carRepository.countCars();
+
+  return {
+    cars,
+    currentPage: page,
+    totalPages: Math.ceil(carsCount / perPage) || 1,
+  };
+};
 
 /**
  * @param {Deps} deps

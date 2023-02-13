@@ -35,9 +35,19 @@ OFFSET $3
 
 /**
  * @param {Deps} deps
+ * @returns {number}
+ */
+export const countCars = async ({ queryBuilder }) => (await queryBuilder
+  .query('SELECT COUNT(id) FROM "Car"'))
+  .rows[0]
+  .count;
+
+/**
+ * @param {Deps} deps
  * @returns {CarRepository}
  */
 export const initCarRepository = (deps) => ({
   getCarById: partial(getCarById, deps),
   getCarsList: partial(getCarsList, deps),
+  countCars: partial(countCars, deps),
 });
