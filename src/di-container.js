@@ -9,8 +9,12 @@ import { initDriverService } from './driver/driver.service.js';
 import { initCarRepository } from './car/car.repository.js';
 import { initCarService } from './car/car.service.js';
 
+
+// @ts-ignore
+const createContainer = diContainer.default;
+
 /** @type {import('../types/src/di-container').DiContainer} */
-const container = diContainer.default({
+const container = createContainer({
   queryBuilder: () => initDbQueryBuilder({
     ...config.db,
   }),
