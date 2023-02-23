@@ -8,7 +8,7 @@ import { initControllers } from './init-controllers.js';
  * Build fastify app
  * @param {FastifyServerOptions} opts
  */
-export const buildApp = (opts = { logger: true }) => {
+export const initFastifyApp = (opts = { logger: true }) => {
   const app = fastify(opts);
 
   app.register(fastifyCookie);

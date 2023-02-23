@@ -1,8 +1,8 @@
-import { buildApp } from './app.js';
+import { initFastifyApp } from './fastify-app.js';
 import { config } from './config.js';
 
 (async () => {
-  const server = buildApp();
+  const server = initFastifyApp();
 
   await server.listen(config.server);
 })();
