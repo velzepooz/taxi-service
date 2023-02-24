@@ -12,7 +12,7 @@
 
 import { partial } from '@oldbros/shiftjs';
 import { comparePasswords, generateHashForPassword } from '../utils/crypto.utils.js';
-import { ApplicationError } from '../shared/application.error.js';
+import { ApplicationError } from '../utils/application.error.js';
 import { jwtConfig } from './config.js';
 
 /**

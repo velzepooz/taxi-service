@@ -1,4 +1,4 @@
-import { paginationDto } from '../../shared/pagination.dto.js';
+import { paginationDto } from '../../utils/pagination.dto.js';
 
 export const getCarsListDto = {
   ...paginationDto,
