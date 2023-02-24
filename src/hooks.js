@@ -1,6 +1,6 @@
 /** @typedef {import('../types/src/auth/jwt.service').JwtService} JwtService */
 import { jwtConfig } from './auth/config.js';
-import { ApplicationError } from './shared/application.error.js';
+import { ApplicationError } from './utils/application.error.js';
 import container from './di-container.js';
 
 export const refreshTokenHook = async (request) => {
