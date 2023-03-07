@@ -28,11 +28,37 @@ model User {
   refreshToken String?
 }
 
+enum CarColor {
+  red
+  orange
+  yellow
+  green
+  blue
+  violet
+  pink
+  black
+  brown
+  grey
+  white
+}
+
 model Driver {
   id              Int      @id @default(autoincrement())
   createdAt       DateTime @default(now()) @db.Timestamptz(0)
   updatedAt       DateTime @updatedAt
   driverLicenceId String
+  carColor        CarColor
+  carVRN          String
+  car             Car      @relation(fields: [carId], references: [id])
+  carId           Int
   user            User     @relation(fields: [userId], references: [id])
   userId          Int      @unique
+}
+
+model Car {
+  id           Int      @id @default(autoincrement())
+  year         Int
+  manufacturer String
+  model        String
+  Driver       Driver[]
 }
