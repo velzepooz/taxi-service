@@ -1,14 +1,14 @@
 import { describe, it, beforeEach, before } from 'node:test';
 import assert from 'node:assert';
 import { faker } from '../utils/faker.js';
-import { buildApp } from '../utils/test.utils.js';
+import { initFastifyApp } from '../../src/fastify-app.js';
 import { createUser } from '../factories/user.factory.js';
 
 describe('On authController', () => {
   let app;
 
   before(() => {
-    app = buildApp();
+    app = initFastifyApp({ logger: false });
   });
 
   describe('On signUp', () => {

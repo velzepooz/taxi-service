@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "RIP NestJS no need in you",
   "type": "module",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/app.js",
-    "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/app.js",
+    "start": "node src/server.js.js",
+    "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/server.js | pino-pretty -S",
     "check": "npx tsc --project tsconfig.json",
     "lint": "eslint .",
     "fmt": "eslint --fix .",
@@ -40,7 +40,8 @@
     "jose": "^4.11.2",
     "metasql": "^2.1.2",
     "pg": "^8.8.0",
-    "redis": "^4.5.1"
+    "redis": "^4.5.1",
+    "true-di": "^3.0.0"
   },
   "devDependencies": {
     "@oldbros/tsconfig": "^1.0.1",

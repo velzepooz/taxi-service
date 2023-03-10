@@ -14,5 +14,9 @@ export const config = {
     database: process.env.POSTGRES_DATABASE_NAME || '',
     user: process.env.POSTGRES_USER || '',
     password: process.env.POSTGRES_PASSWORD || '',
+    logger: {
+      db: process.env.DEBUG ? console.log : () => {},
+      debug: process.env.DEBUG ? console.log : () => {},
+    },
   },
 };

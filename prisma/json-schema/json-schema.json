@@ -69,8 +69,53 @@
         "driverLicenceId": {
           "type": "string"
         },
+        "carColor": {
+          "type": "string",
+          "enum": [
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "blue",
+            "violet",
+            "pink",
+            "black",
+            "brown",
+            "grey",
+            "white"
+          ]
+        },
+        "carVRN": {
+          "type": "string"
+        },
+        "car": {
+          "$ref": "#/definitions/Car"
+        },
         "user": {
           "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "Car": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "year": {
+          "type": "integer"
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "Driver": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Driver"
+          }
         }
       }
     }
@@ -82,6 +127,9 @@
     },
     "driver": {
       "$ref": "#/definitions/Driver"
+    },
+    "car": {
+      "$ref": "#/definitions/Car"
     }
   }
 }

@@ -12,11 +12,11 @@ import { signUpDto } from './dto/sign-up.dto.js';
 import { signInDto } from './dto/sign-in.dto.js';
 
 /**
- * @param {import('../../types/src/auth/auth.service').AuthService} authService
- * @param {import('../../types/src/auth/jwt.service').JwtService} jwtService
+ * @param {DiContainer} container
  * @returns {FastifyRoute[]}
  */
-export const initAuthController = (authService, jwtService) => {
+export const initAuthController = (container) => {
+  const { authService } = container;
   const urlPrefix = '/auth';
 
   const signUpRoute = {
@@ -57,7 +57,7 @@ export const initAuthController = (authService, jwtService) => {
   const refreshRoute = {
     method: 'POST',
     url: `${urlPrefix}/refresh`,
-    onRequest: refreshTokenHook(jwtService),
+    onRequest: refreshTokenHook,
     /**
      * @param {RequestWithUserId} request
      * @param {FastifyReply} reply
@@ -74,7 +74,7 @@ export const initAuthController = (authService, jwtService) => {
   const signOutRoute = {
     method: 'POST',
     url: `${urlPrefix}/signOut`,
-    onRequest: accessTokenHook(jwtService),
+    onRequest: accessTokenHook,
     /**
      * @param {RequestWithUserId} request
      * @param {FastifyReply} reply
