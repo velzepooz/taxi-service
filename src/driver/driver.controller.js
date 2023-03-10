@@ -1,5 +1,8 @@
-/** @typedef {import('fastify').RouteOptions} FastifyRoute */
-/** @typedef {import('./driver.service').DriverService} DriverService */
+/**
+ *  @typedef {import('fastify').RouteOptions} FastifyRoute
+ *  @typedef {import('../../types/src/driver/driver.service').DriverService} DriverService
+ *   @typedef {import('../../types/src/di-container').DiContainer} DiContainer
+ */
 
 import { accessTokenHook } from '../hooks.js';
 import { CreateDriverDto } from './dto/create-driver.dto.js';

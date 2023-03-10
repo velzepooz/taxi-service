@@ -1,11 +1,12 @@
 /**
  * @typedef {import('../../types/src/driver/driver.service').Deps} Deps
+ * @typedef {import('../../types/src/driver/dto/create-driver.dto').CreateDriverDto} CreateDriverDto
  * @typedef {import('../../types/src/driver/driver.service').DriverService} DriverService
  * @typedef {import('../../types/src/driver/driver.repository').Driver} Driver
  */
 
 import { partial } from '@oldbros/shiftjs';
-import { ApplicationError } from '../application.error.js';
+import { ApplicationError } from '../utils/application.error.js';
 
 /**
  * @param {Deps} deps
