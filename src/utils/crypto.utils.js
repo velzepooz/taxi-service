@@ -4,7 +4,7 @@ import { promisify } from 'util';
 const scrypt = promisify(crypto.scrypt);
 
 /**
- * @param password
+ * @param {string} password
  * @returns {Promise<string>}
  */
 export async function generateHashForPassword(password) {
@@ -15,8 +15,8 @@ export async function generateHashForPassword(password) {
 }
 
 /**
- * @param password
- * @param hash
+ * @param {string} password
+ * @param {string} hash
  * @returns {Promise<boolean>}
  */
 export async function comparePasswords(password, hash) {

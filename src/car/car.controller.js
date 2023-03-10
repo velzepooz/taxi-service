@@ -1,5 +1,6 @@
 /**
  * @typedef {import('../../types/src/di-container').DiContainer} DiContainer
+ * @typedef {import('fastify').RouteOptions} FastifyRoute
  */
 import { accessTokenHook } from '../hooks.js';
 import { getCarsListDto } from './dto/get-cars-list.dto.js';

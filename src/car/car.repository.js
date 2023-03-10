@@ -6,6 +6,7 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
+import Cursor from 'pg-cursor';
 
 /**
  * @param {Deps} deps
@@ -35,13 +36,23 @@ OFFSET $3
 
 /**
  * @param {Deps} deps
- * @returns {number}
+ * @returns {Promise<number>}
  */
 export const countCars = async ({ queryBuilder }) => (await queryBuilder
-  .query('SELECT COUNT(id) FROM "Car"'))
+  .query('SELECT COUNT(id) FROM "Car"', []))
   .rows[0]
   .count;
 
+export const getCarsWithCursor = async ({ queryBuilder }, { perPage, search }) => {
+  const client = await queryBuilder.pool.connect();
+  const cursor = await client.query(new Cursor(`
+SELECT * FROM "Car"
+WHERE LOWER(manufacturer) LIKE LOWER(CONCAT('%', $1::text, '%')) OR LOWER(model) LIKE LOWER(CONCAT('%', $1::text, '%'))
+ORDER BY year DESC 
+  `, [search]));
+
+  return cursor.read(perPage);
+};
 /**
  * @param {Deps} deps
  * @returns {CarRepository}
@@ -50,4 +61,5 @@ export const initCarRepository = (deps) => ({
   getCarById: partial(getCarById, deps),
   getCarsList: partial(getCarsList, deps),
   countCars: partial(countCars, deps),
+  getCarsWithCursor: partial(getCarsWithCursor, deps),
 });

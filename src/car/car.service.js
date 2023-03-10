@@ -15,15 +15,21 @@ import { partial } from '@oldbros/shiftjs';
  * @returns {Promise<CarsList[]>}
  */
 export const getCarsList = async ({ carRepository }, { page, perPage, search }) => {
-  const carsPromise = carRepository
-    .getCarsList({ limit: perPage, offset: (page - 1) * perPage, search });
-  const carsCountPromise = carRepository.countCars();
-  const [cars, carsCount] = await Promise.all([carsPromise, carsCountPromise]);
+  let cars = [];
+  try {
+    cars = await carRepository.getCarsWithCursor({ perPage, search });
+  } catch (e) {
+    console.log({ e });
+  }
+  // const carsPromise = carRepository
+  //   .getCarsList({ limit: perPage, offset: (page - 1) * perPage, search });
+  // const carsCountPromise = carRepository.countCars();
+  // const [cars, carsCount] = await Promise.all([carsPromise, carsCountPromise]);
 
   return {
     cars,
     currentPage: page,
-    totalPages: Math.ceil(carsCount / perPage) || 1,
+    totalPages: Math.ceil(1 / perPage) || 1,
   };
 };
 
