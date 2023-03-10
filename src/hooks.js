@@ -1,11 +1,17 @@
-/** @typedef {import('../types/src/auth/jwt.service').JwtService} JwtService */
+/**
+ * @typedef {import('../types/src/auth/jwt.service').JwtService} JwtService
+ * @typedef {import('../types/src/common.types').RequestWithUserId} RequestWithUserId
+ */
 import { jwtConfig } from './auth/config.js';
 import { ApplicationError } from './utils/application.error.js';
 import container from './di-container.js';
 
+/**
+ * @param {RequestWithUserId} request
+ */
 export const refreshTokenHook = async (request) => {
   const { jwtService } = container;
-  const { Refresh } = request.cookies;
+  const { Refresh = '' } = request.cookies;
 
   const data = await jwtService.verifyJwt(Refresh, jwtConfig.refreshTokenSecret);
 
@@ -16,6 +22,9 @@ export const refreshTokenHook = async (request) => {
   request.userId = data.id;
 };
 
+/**
+ * @param {RequestWithUserId} request
+ */
 export const accessTokenHook = async (request) => {
   const { jwtService } = container;
   const { Authentication } = request.cookies;
