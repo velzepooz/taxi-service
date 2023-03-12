@@ -1,3 +1,5 @@
+import {DiContainer} from "../di-container";
+
 export type PlaceCoordinates = {
   lat: number;
   long: number;
@@ -14,7 +16,14 @@ export type DirectionsInfo = {
   departureAddress: string;
   destinationAddress: string;
 };
-export type GetDirectionInfo = (departurePoint: PlaceCoordinates, destinationPoint: PlaceCoordinates) => Promise<DirectionsInfo | null>;
+export type MapsAPIProviderDeps = {
+  logger: DiContainer['logger'];
+};
+export type DirectionInfoParams = {
+  departurePoint: PlaceCoordinates;
+  destinationPoint: PlaceCoordinates;
+}
+export type GetDirectionInfo = (params: DirectionInfoParams) => Promise<DirectionsInfo | null>;
 export interface MapsAPIProvider {
   getDirectionInfo: GetDirectionInfo;
 }

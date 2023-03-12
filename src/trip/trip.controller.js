@@ -9,7 +9,7 @@ export const initTripController = (container) => {
   const { tripService } = container;
   const urlPrefix = '/trip';
 
-  const getTripInfoRoute = {
+  const getTripCalculationInfoRoute = {
     method: 'GET',
     schema: {
       querystring: getTripInfoDto,
@@ -20,11 +20,10 @@ export const initTripController = (container) => {
     url: `${urlPrefix}/calculate`,
     onRequest: accessTokenHook,
     handler: async (request, reply) => {
-      const data = request.query;
-      const tripInfo = await tripService.getTripInfo(data);
+      const tripInfo = await tripService.getTripCalculationInfo(request.query);
       reply.status(200).send(tripInfo);
     },
   };
 
-  return [getTripInfoRoute];
+  return [getTripCalculationInfoRoute];
 };

@@ -13,7 +13,7 @@ export type TripInfo = {
   distance: number;
 };
 
-export type GetTripInfo = (payload: CalculateTripPriceDto) => TripInfo;
+export type GetTripCalculationInfo = (payload: CalculateTripPriceDto) => TripInfo;
 export type TripService = {
-  getTripInfo: GetTripInfo,
+  getTripCalculationInfo: GetTripCalculationInfo,
 };

@@ -14,7 +14,7 @@ import { partial } from '@oldbros/shiftjs';
  * @returns {Promise<DirectionsInfo | null>}
  */
 export const getTripInfo = async ({ mapsApiProvider }, departurePoint, destinationPoint) =>
-  mapsApiProvider.getDirectionInfo(departurePoint, destinationPoint);
+  mapsApiProvider.getDirectionInfo({ departurePoint, destinationPoint });
 
 /**
  * @param {Deps} deps

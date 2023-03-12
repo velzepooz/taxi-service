@@ -6,10 +6,9 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
-
 import { ApplicationError } from '../application.error.js';
 import { calculatePriceForTrip } from './calculations/calculate-trip-price.js';
-import { convertMetersToKilometeres } from './calculations/calculate-distance.js';
+import { convertMetersToKilometres } from './calculations/calculate-distance.js';
 import { convertSecondsToMinutes } from './calculations/calculate-duration.js';
 
 /**
@@ -17,18 +16,18 @@ import { convertSecondsToMinutes } from './calculations/calculate-duration.js';
  * @param {CalculateTripPriceDto} payload
  * @returns {Promise<TripInfo>}
  */
-export const getTripInfo = async ({ mapsService }, payload) => {
+export const getTripCalculationInfo = async ({ mapsService }, payload) => {
   const tripInfoFromMaps = await mapsService.getTripInfo(
     { lat: payload.depLat, long: payload.depLong },
     { lat: payload.destLat, long: payload.destLong },
   );
   if (!tripInfoFromMaps) throw new ApplicationError('Maps service temporarily unavailable');
-  const distanceInKms = convertMetersToKilometeres(tripInfoFromMaps.distnace);
+  const distanceInKms = convertMetersToKilometres(tripInfoFromMaps.distance);
   const tripPrice = calculatePriceForTrip(distanceInKms);
 
   return {
-    departureAddress: tripInfoFromMaps.depatureAddress,
-    destinationAddress: tripInfoFromMaps.destionationAddress,
+    departureAddress: tripInfoFromMaps.departureAddress,
+    destinationAddress: tripInfoFromMaps.destinationAddress,
     price: tripPrice,
     duration: convertSecondsToMinutes(tripInfoFromMaps.duration),
     distance: distanceInKms,
@@ -40,5 +39,5 @@ export const getTripInfo = async ({ mapsService }, payload) => {
  * @returns {TripService}
  */
 export const initTripService = (deps) => ({
-  getTripInfo: partial(getTripInfo, deps),
+  getTripCalculationInfo: partial(getTripCalculationInfo, deps),
 });

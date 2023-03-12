@@ -1,5 +1,3 @@
-import { ApplicationError } from '../application.error.js';
-
 /**
  * @param {string} url
  * @param {object} requestData
@@ -14,7 +12,4 @@ export const makeHttpRequest = (url, { method, headers, data } = {}) => fetch(ur
   ...data && { body: JSON.stringify(data) },
 })
   .then((response) => response.json())
-  .catch((error) => {
-    console.error(error);
-    throw new ApplicationError('Error at makeHttpRequest');
-  });
+  .catch(console.error);
