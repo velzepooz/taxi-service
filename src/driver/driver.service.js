@@ -2,6 +2,7 @@
  * @typedef {import('../../types/src/driver/driver.service').Deps} Deps
  * @typedef {import('../../types/src/driver/driver.service').DriverService} DriverService
  * @typedef {import('../../types/src/driver/driver.repository').Driver} Driver
+ * @typedef {import('../../types/src/driver/dto/create-driver.dto').CreateDriverDto} CreateDriverDto
  */
 
 import { partial } from '@oldbros/shiftjs';

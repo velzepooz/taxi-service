@@ -1,17 +1,14 @@
-/**
- * @typedef {import('fastify').RouteOptions} FastifyRoute
- */
-
 import { initAuthController } from './auth/auth.controller.js';
 import { initDriverController } from './driver/driver.controller.js';
+import { initTripController } from './trip/trip.controller.js';
 
 /**
- * @param {import('../types/src/di-container').DiContainer} container
- * @returns {FastifyRoute[]}
+ * @type {import('../types/src/common.types').initController}
  */
 export const initControllers = (container) => {
   const authRoutes = initAuthController(container);
   const driverRoutes = initDriverController(container);
+  const tripRoutes = initTripController(container);
 
-  return [...authRoutes, ...driverRoutes];
+  return [...authRoutes, ...driverRoutes, ...tripRoutes];
 };
