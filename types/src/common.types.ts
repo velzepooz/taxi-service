@@ -1,5 +1,4 @@
-import { FastifyRequest } from 'fastify';
-import {FastifyRoute} from '../../src/app.module';
+import { FastifyRequest, RouteOptions as FastifyRoute } from 'fastify';
 import {DiContainer} from './di-container';
 
 export type RequestWithUserId = FastifyRequest & {

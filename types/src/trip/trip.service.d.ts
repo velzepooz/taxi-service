@@ -1,8 +1,8 @@
-import {MapsSerivce} from "../maps/maps.service";
+import {MapsService} from "../maps/maps.service";
 import {CalculateTripPriceDto} from "./dto/calculate-trip-price.dto";
 
 export type Deps = {
-  mapsService: MapsSerivce;
+  mapsService: MapsService;
 };
 
 export type TripInfo = {

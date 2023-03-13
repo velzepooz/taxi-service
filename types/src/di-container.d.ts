@@ -5,7 +5,7 @@ import {AuthService} from "./auth/auth.service";
 import {DriverRepository} from "./driver/driver.repository";
 import {DriverService} from "./driver/driver.service";
 import {CarRepository} from "./car/car.repository";
-import {MapsAPIProvider, MapsSerivce} from "./maps/maps.service";
+import {MapsAPIProvider, MapsService} from "./maps/maps.service";
 import {TripService} from "./trip/trip.service";
 import {Logger} from './logger';
 
@@ -19,6 +19,6 @@ export type DiContainer = {
   driverService: DriverService;
   carRepository: CarRepository;
   mapsApiProvider: MapsAPIProvider;
-  mapsService: MapsSerivce;
+  mapsService: MapsService;
   tripService: TripService;
 };

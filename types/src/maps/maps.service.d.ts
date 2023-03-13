@@ -33,6 +33,6 @@ export type Deps = {
 };
 
 export type GetTripInfo = (depaturePoint: PlaceCoordinates, destinationPoint: PlaceCoordinates) => Promise<DirectionsInfo | null>;
-export type MapsSerivce = {
+export type MapsService = {
   getTripInfo: GetTripInfo;
 };
