@@ -40,6 +40,8 @@
     "jose": "^4.11.2",
     "metasql": "^2.1.2",
     "pg": "^8.8.0",
+    "pg-cursor": "^2.8.0",
+    "pino-pretty": "^9.4.0",
     "redis": "^4.5.1",
     "true-di": "^3.0.0"
   },
@@ -54,7 +56,7 @@
     "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.20",
     "prisma": "^4.9.0",
-    "prisma-json-schema-generator": "^3.1.2",
+    "prisma-json-schema-generator": "^2.0.17",
     "tap": "^16.3.4",
     "typescript": "^4.9.4"
   }

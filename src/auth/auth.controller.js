@@ -5,6 +5,7 @@
  * @typedef {import('../../types/src/auth/dto/sign-in.dto').SignInDto} SignInDto
  * @typedef {import('../../types/src/auth/auth.service').AuthService} AuthService
  * @typedef {import('../../types/src/common.types').RequestWithUserId} RequestWithUserId
+ * @typedef {import('../../types/src/di-container').DiContainer} DiContainer
  */
 
 import { accessTokenHook, refreshTokenHook } from '../hooks.js';

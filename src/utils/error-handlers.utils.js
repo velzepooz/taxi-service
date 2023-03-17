@@ -3,7 +3,7 @@
  * @typedef {import('fastify').FastifyReply} FastifyReply
  * @typedef {import('fastify').FastifyRequest} FastifyRequest
  * */
-import { ApplicationError } from '../application.error.js';
+import { ApplicationError } from './application.error.js';
 
 
 /**

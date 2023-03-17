@@ -1,6 +1,8 @@
 /**
  * @typedef {import('../../types/src/driver/driver.repository').Deps} Deps
- * @typedef {import('../../types/src/driver/driver.repository').Driver} Deps
+ * @typedef {import('../../types/src/driver/driver.repository').Driver} Driver
+ * @typedef {import('../../types/src/driver/driver.repository').DriverRepository} DriverRepository
+ * @typedef {import('../../types/src/driver/driver.repository').DriverToCreate} DriverToCreate
  */
 
 import { partial } from '@oldbros/shiftjs';
@@ -11,6 +13,7 @@ import { partial } from '@oldbros/shiftjs';
  * @returns {Promise<Driver>}
  */
 export const createDriver = async ({ queryBuilder }, driverToCreate) => {
+  /** @type {*} */
   const result = await queryBuilder
     .insert('Driver', { ...driverToCreate, updatedAt: new Date() })
     .returning(['*']);
