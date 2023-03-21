@@ -5,8 +5,8 @@
   "type": "module",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js.js",
-    "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/server.js | pino-pretty -S",
+    "start": "node src/server.js",
+    "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/server.js",
     "check": "npx tsc --project tsconfig.json",
     "lint": "eslint .",
     "fmt": "eslint --fix .",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/georgolden/rip-nest.git"
+    "urr": "git+https://github.com/georgolden/rip-nest.git"
   },
   "author": "Georg Oldenburger",
   "contributors": [
@@ -40,6 +40,7 @@
     "jose": "^4.11.2",
     "metasql": "^2.1.2",
     "pg": "^8.8.0",
+    "pino": "^8.11.0",
     "redis": "^4.5.1",
     "true-di": "^3.0.0"
   },
@@ -53,6 +54,7 @@
     "eslint-config-oldbros": "^1.0.2",
     "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.20",
+    "pino-pretty": "^9.4.0",
     "prisma": "^4.9.0",
     "prisma-json-schema-generator": "^3.1.2",
     "tap": "^16.3.4",
