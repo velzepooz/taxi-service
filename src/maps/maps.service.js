@@ -6,6 +6,7 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
+import { ApplicationError } from '../application.error.js';
 
 /**
  * @param {Deps} deps
@@ -13,13 +14,28 @@ import { partial } from '@oldbros/shiftjs';
  * @param {PlaceCoordinates} destinationPoint
  * @returns {Promise<DirectionsInfo | null>}
  */
-export const getTripInfo = async ({ mapsApiProvider }, departurePoint, destinationPoint) =>
-  mapsApiProvider.getDirectionInfo({ departurePoint, destinationPoint });
+export const getTripInfo = async ({ mapsApiProvider, logger }, departurePoint, destinationPoint) => {
+  try {
+    return await mapsApiProvider.getDirectionInfo({ departurePoint, destinationPoint });
+  } catch (e) {
+    logger.error(e);
+    throw new ApplicationError('Maps service temporarily unavailable');
+  }
+};
 
 /**
  * @param {Deps} deps
  * @returns {MapsService}
  */
-export const initMapsService = (deps) => ({
-  getTripInfo: partial(getTripInfo, deps),
-});
+export const initMapsService = (deps) => {
+  const serviceName = 'MapsService';
+  return {
+    getTripInfo: partial(
+      getTripInfo,
+      {
+        ...deps,
+        logger: deps.logger.child({ service: serviceName, method: 'getTripInfo' }),
+      },
+    ),
+  };
+};

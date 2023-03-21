@@ -6,7 +6,6 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
-import { ApplicationError } from '../application.error.js';
 import { calculatePriceForTrip } from './calculations/calculate-trip-price.js';
 import { convertMetersToKilometres } from './calculations/calculate-distance.js';
 import { convertSecondsToMinutes } from './calculations/calculate-duration.js';
@@ -21,7 +20,6 @@ export const getTripCalculationInfo = async ({ mapsService }, payload) => {
     { lat: payload.depLat, long: payload.depLong },
     { lat: payload.destLat, long: payload.destLong },
   );
-  if (!tripInfoFromMaps) throw new ApplicationError('Maps service temporarily unavailable');
   const distanceInKms = convertMetersToKilometres(tripInfoFromMaps.distance);
   const tripPrice = calculatePriceForTrip(distanceInKms);
 

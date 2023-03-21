@@ -25,7 +25,7 @@ const container = diContainer.default({
   carRepository: ({ queryBuilder }) => initCarRepository({ queryBuilder }),
   driverService: ({ driverRepository, carRepository }) => initDriverService({ driverRepository, carRepository }),
   mapsApiProvider: ({ logger }) => initGoogleMapsProvider({ logger }),
-  mapsService: ({ mapsApiProvider }) => initMapsService({ mapsApiProvider }),
+  mapsService: ({ logger, mapsApiProvider }) => initMapsService({ mapsApiProvider, logger }),
   tripService: ({ mapsService }) => initTripService({ mapsService }),
 });
 

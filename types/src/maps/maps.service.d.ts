@@ -30,9 +30,9 @@ export interface MapsAPIProvider {
 
 export type Deps = {
   mapsApiProvider: MapsAPIProvider;
-};
+  logger: DiContainer['logger'];};
 
-export type GetTripInfo = (depaturePoint: PlaceCoordinates, destinationPoint: PlaceCoordinates) => Promise<DirectionsInfo | null>;
+export type GetTripInfo = (depaturePoint: PlaceCoordinates, destinationPoint: PlaceCoordinates) => Promise<DirectionsInfo>;
 export type MapsService = {
   getTripInfo: GetTripInfo;
 };

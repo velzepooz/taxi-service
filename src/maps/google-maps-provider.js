@@ -7,6 +7,7 @@
  */
 
 import { partial } from '@oldbros/shiftjs';
+import { ApplicationError } from '../application.error.js';
 import { makeHttpRequest } from '../utils/http-request.utils.js';
 
 const API_URL = 'https://maps.googleapis.com/maps/api/directions/json';
@@ -17,31 +18,43 @@ const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
  */
 export const getDirectionInfo = async (deps, { departurePoint, destinationPoint }) => {
   const { logger } = deps;
-  try {
-    /** @type {GoogleDirectionResponse} */
-    // eslint-disable-next-line max-len
-    const response = await makeHttpRequest(`${API_URL}?origin=${departurePoint.long}, ${departurePoint.lat}&destination=${destinationPoint.long}, ${destinationPoint.lat}&key=${GOOGLE_API_KEY}`);
-    if (!response || response.status !== 'OK') {
-      logger.error(response.status);
-      return null;
-    }
-    const [bestRoute] = response.routes;
-    if (!bestRoute) return null;
-    const [routeInfo] = bestRoute.legs;
-
-    return routeInfo
-      ? {
-        destinationAddress: routeInfo.end_address,
-        departureAddress: routeInfo.start_address,
-        distance: routeInfo.distance.value,
-        duration: routeInfo.duration.value,
-      } : null;
-  } catch (e) {
-    logger.error(e);
-
-    return null;
+  const urlQueryParams = getDirectionInfoUrl({
+    departurePointLong: departurePoint.long,
+    departurePointLat: departurePoint.lat,
+    destinationPoint: destinationPoint.long,
+    destinationPointLat: destinationPoint.lat,
+  });
+  /** @type {GoogleDirectionResponse} */
+  const response = await makeHttpRequest(`${API_URL}?${urlQueryParams}&key=${GOOGLE_API_KEY}`);
+  if (!response || response.status !== 'OK') {
+    logger.error({ status: response.status, error: response.error_message });
+    throw new ApplicationError('Google map unavailable');
   }
+  const [bestRoute] = response.routes;
+  if (!bestRoute) throw new ApplicationError('No best rout found');
+  const [routeInfo] = bestRoute.legs;
+  if (!routeInfo) throw new ApplicationError('No rout info found');
+
+  return {
+    destinationAddress: routeInfo.end_address,
+    departureAddress: routeInfo.start_address,
+    distance: routeInfo.distance.value,
+    duration: routeInfo.duration.value,
+  };
 };
+
+/**
+ * @param {object} queryParams
+ * @property {string} departurePointLong
+ * @property {string} departurePointLat
+ * @property {string} destinationPointLong
+ * @property {string} destinationPointLat
+ * @returns {string}
+ */
+function getDirectionInfoUrl({ departurePointLong, departurePointLat, destinationPointLong, destinationPointLat }) {
+  // eslint-disable-next-line max-len
+  return `origin=${departurePointLong}, ${departurePointLat}&destination=${destinationPointLong}, ${destinationPointLat}`;
+}
 
 /**
  * @param {MapsAPIProviderDeps} deps
