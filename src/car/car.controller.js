@@ -23,7 +23,7 @@ export const initCarController = (container) => {
       },
     },
     url: `${urlPrefix}/list`,
-    onRequest: accessTokenHook,
+    // onRequest: accessTokenHook,
     handler: async (request, reply) => {
       const cars = await carService.getCarsList(request.query);
       reply.code(200).send(cars);

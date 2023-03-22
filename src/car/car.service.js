@@ -14,10 +14,11 @@ import { partial } from '@oldbros/shiftjs';
  * @param {GetCarsListParams} getListParams
  * @returns {Promise<CarsList[]>}
  */
-export const getCarsList = async ({ carRepository }, { page, perPage, search }) => {
+export const getCarsList = async ({ carRepository, bus }, { page, perPage, search }) => {
   let cars = [];
   try {
     cars = await carRepository.getCarsWithCursor({ perPage, search });
+    bus.emit('mail', cars);
   } catch (e) {
     console.log({ e });
   }
