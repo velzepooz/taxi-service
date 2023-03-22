@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js.js",
+    "start": "export $(grep -v '^#' .env | xargs) && node src/server.js",
     "start:dev": "export $(grep -v '^#' .env | xargs) && nodemon src/server.js | pino-pretty -S",
     "check": "npx tsc --project tsconfig.json",
     "lint": "eslint .",
